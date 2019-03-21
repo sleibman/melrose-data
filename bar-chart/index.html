@@ -4,7 +4,7 @@ title: D3.js Bar Chart using YAML and Jekyll
 ---
 
 <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 
 <h3>D3.js Bar Chart Using YAML and Jekyll</h3>
 
@@ -39,69 +39,74 @@ title: D3.js Bar Chart using YAML and Jekyll
 </style>
 
 <script>
+  var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
 
-  height = 500;
-  width = 500;
+  // Parse the date / time
+  var	parseDate = d3.time.format("%Y-%m").parse;
 
-  margin = ({top: 20, right: 0, bottom: 30, left: 40});
+  var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
-  xAxis = g => g
-    .attr("transform", `translate(0,${height - margin.bottom})`)
-    .call(d3.axisBottom(x).tickSizeOuter(0))
+  var y = d3.scale.linear().range([height, 0]);
 
-  yAxis = g => g
-    .attr("transform", `translate(${margin.left},0)`)
-    .call(d3.axisLeft(y))
-    .call(g => g.select(".domain").remove())
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickFormat(d3.time.format("%Y-%m"));
 
-const csv_file = "https://gist.githubusercontent.com/mbostock/81aa27912ad9b1ed577016797a780b2c/raw/3a807eb0cbb0f5904053ac2f9edf765e2f87a2f5/alphabet.csv";
+  var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
 
-  async function render() {
-    data = (await
-    d3.csv(csv_file, ({letter, frequency}) => ({name: letter, value: +frequency})
-  )).
-    sort((a, b) => b.value - a.value
-  )
+  var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
 
+  d3.csv("/bar-data.csv", function(error, data) {
 
+    data.forEach(function(d) {
+      d.date = parseDate(d.date);
+      d.value = +d.value;
+    });
 
-    x = d3.scaleBand()
-      .domain(data.map(d => d.name))
-  .range([margin.left, width - margin.right])
-      .padding(0.1)
-
-    y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)]).nice()
-      .range([height - margin.bottom, margin.top])
-
-
-    const svg = d3.select("div#example").selectAll("svg");
+    x.domain(data.map(function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
     svg.append("g")
-      .attr("fill", "steelblue")
-      .selectAll("rect")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" );
+
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Value ($)");
+
+    svg.selectAll("bar")
       .data(data)
-      .join("rect")
-      .attr("x", d => x(d.name)
-  )
-  .
-    attr("y", d => y(d.value)
-  )
-  .
-    attr("height", d => y(0) - y(d.value)
-  )
-  .
-    attr("width", x.bandwidth());
+      .enter().append("rect")
+      .style("fill", "steelblue")
+      .attr("x", function(d) { return x(d.date); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); });
 
-    svg.append("g")
-      .call(xAxis);
-
-    svg.append("g")
-      .call(yAxis);
-
-  }
-
-  render();
+  });
 
 </script>
 
