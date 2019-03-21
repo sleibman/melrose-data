@@ -7,7 +7,9 @@ title: D3.js Bar Chart using YAML and Jekyll
 <script src="https://d3js.org/d3.v3.min.js"></script>
 
 <h3>D3.js Bar Chart Using YAML and Jekyll</h3>
-
+abc
+<div id="example"></div>
+def
 <div id="chart"></div>
 
 <style>
@@ -60,7 +62,7 @@ title: D3.js Bar Chart using YAML and Jekyll
     .orient("left")
     .ticks(10);
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("div#example").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -109,6 +111,4 @@ title: D3.js Bar Chart using YAML and Jekyll
   });
 
 </script>
-
-<div id="example"></div>
 
