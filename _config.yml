@@ -2,5 +2,5 @@ theme: jekyll-theme-tactile
 
 head_scripts:
   - https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js
-
-
+  - http://code.jquery.com/jquery-latest.min.js
+  - https://d3js.org/d3.v3.min.js
