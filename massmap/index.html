@@ -37,9 +37,10 @@ title: Per-pupil expenditures in Massachusetts school districts
 <body>
 
 <div id="top">
-  <p><img src="legend.png"></p>
-  <div id="mapspot"></div>
 
+
+  <p><img src="legend.png" width="440" height="216"></p>
+  <div id="mapspot"></div>
   <p>Source: <a href="http://profiles.doe.mass.edu/statereport/ppx.aspx">http://profiles.doe.mass.edu/statereport/ppx.aspx</a></p>
 </div>
 
@@ -108,14 +109,21 @@ title: Per-pupil expenditures in Massachusetts school districts
         var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
         tooltip
           .classed("hidden", false)
-          .attr("style", "left:"+(mouse[0])+"px;top:"+(mouse[1])+"px")
           .html(d.id)
+          .style("left", d + "px")
+          .style("top", d + "px");
       })
       .on("mouseout",  function(d,i) {
         tooltip.classed("hidden", true)
       });
 
   });
+
+//
+//  .style("left", (d3.event.pageX) + "px")
+//    .style("top", (d3.event.pageY) + "px")
+//    .attr("style", "left:"+(mouse[0])+"px;top:"+(mouse[1])+"px")
+
 
   d3.select(self.frameElement).style("height", height + "px");
 </script>
