@@ -41,6 +41,22 @@ def
 </style>
 
 <script>
+
+  var toggleColor = (function(){
+    var currentColor = "white";
+
+    d3.select("body").transition()
+      .style("background-color", "black");
+
+    return function(){
+      currentColor = currentColor == "white" ? "magenta" : "white";
+      d3.select(this).style("fill", currentColor);
+    }
+  })();
+
+  d3.select("body").transition()
+    .style("background-color", "black");
+
   var margin = {top: 20, right: 20, bottom: 70, left: 40},
     width = 600 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
@@ -67,9 +83,12 @@ def
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-      "translate(" + margin.left + "," + margin.top + ")");
+      "translate(" + margin.left + "," + margin.top + ")")
+    .on("click", toggleColor);
 
-  d3.csv("https://raw.githubusercontent.com/sleibman/melrose-data/master/bar-data.csv", function(error, data) {
+  const csv_file = "https://raw.githubusercontent.com/sleibman/melrose-data/master/bar-data.csv";
+
+  d3.csv(csv_file, function(error, data) {
 
     data.forEach(function(d) {
       d.date = parseDate(d.date);
