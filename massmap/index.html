@@ -76,14 +76,19 @@ title: Per-pupil expenditures in Massachusetts school districts
 //  var color = d3.scale.category20c();
   var color = function (id) {
     console.log(id);
-    if (id === "BROOKFIELD" ||
-    id === "BERKLEY" ||
+    if (id === "DRACUT" ||
+      id === "BERKLEY" ||
+      id === "ACUSHNET" ||
+      id === "ASHBURNHAM" ||
+      id === "WESTMINSTER" ||
+      id === "BRIDGEWATER" ||
+      id === "RAYNHAM" ||
       id === "EAST BRIDGEWATER" ||
-      id === "CHARLTON" ||
-      id === "DUDLEY" ||
-      id === "SOUTHAMPTON" ||
-      id === "NORTH ATTLEBOROUGH" ||
-      id === "QUABOAG") {
+      id === "WEST BRIDGEWATER" ||
+      id === "SWANSEA" ||
+      id === "NARRAGANSETT" ||
+      id === "FREETOWN" ||
+      id === "LAKEVILLE") {
       return "yellow";
     }
     if (id === "MELROSE") {
